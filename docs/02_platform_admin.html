@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BusMitra — Platform Console (10 screens)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#16202E;--ink2:#243347;--slate:#63748C;--line:#DCE2EA;--paper:#EFF1F5;--card:#fff;--bus:#FFC53D;--live:#1E9E6A;--alert:#D8442F;--info:#2D6BE4;--r:12px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.chequer{height:6px;background:repeating-linear-gradient(90deg,var(--bus) 0 12px,var(--ink) 12px 24px)}
+.page{max-width:1280px;margin:0 auto;padding:0 24px 100px}
+.masthead{padding:56px 0 28px}
+.eyebrow{font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:700;color:var(--slate)}
+.masthead h1{font-family:"Archivo Narrow",sans-serif;font-size:52px;line-height:1.02;margin:10px 0 12px;font-weight:700;letter-spacing:-.01em}
+.masthead p{max-width:62ch;color:var(--ink2);font-size:16px;line-height:1.55;margin:0}
+.shot{margin:52px 0 0}
+.shot-head{display:flex;align-items:baseline;gap:14px;margin-bottom:12px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.ref{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;background:var(--ink);color:var(--bus);padding:3px 7px;border-radius:5px}
+.shot-head h2{font-family:"Archivo Narrow",sans-serif;font-size:24px;margin:0;font-weight:700}
+.shot-head span{color:var(--slate);font-size:13.5px;margin-left:auto;text-align:right;max-width:48ch}
+.frame{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 18px 40px -28px rgba(22,32,46,.5)}
+.bar{background:#E3E7ED;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--line)}
+.dot{width:10px;height:10px;border-radius:50%;background:#C3CBD6}
+.url{margin-left:12px;background:#fff;border-radius:6px;padding:3px 12px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--slate)}
+.app{display:grid;grid-template-columns:214px 1fr;min-height:620px}
+.side{background:#0E1725;color:#fff;padding:0 0 18px}
+.brand{padding:0 16px 16px;display:flex;align-items:center;gap:9px}
+.mark{width:26px;height:26px;border-radius:7px;background:var(--bus);display:grid;place-items:center;font-family:"Archivo Narrow",sans-serif;font-weight:700;color:var(--ink);font-size:15px}
+.brand b{font-family:"Archivo Narrow",sans-serif;font-size:17px}
+.brand small{display:block;font-size:9.5px;color:var(--bus);letter-spacing:.16em;text-transform:uppercase;font-family:"Archivo Narrow",sans-serif;font-weight:700}
+.nav{padding:0 10px}
+.nav .grp{font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;letter-spacing:.14em;font-size:10px;color:#63748C;padding:14px 8px 6px}
+.nav a{display:flex;align-items:center;gap:9px;padding:7.5px 9px;border-radius:8px;color:#B9C6D6;text-decoration:none;font-size:13.5px;margin-bottom:1px}
+.nav a.on{background:#22314A;color:#fff;font-weight:600;box-shadow:inset 2px 0 0 var(--bus)}
+.nav a i{width:15px;height:15px;border-radius:4px;background:#31425C;display:block;flex:none}
+.nav a.on i{background:var(--bus)}
+.nav .badge{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;background:var(--alert);color:#fff;border-radius:20px;padding:1px 6px}
+.main{background:var(--paper);display:flex;flex-direction:column;min-width:0}
+.top{background:#fff;border-bottom:1px solid var(--line);padding:13px 22px;display:flex;align-items:center;gap:14px}
+.top h3{font-family:"Archivo Narrow",sans-serif;font-size:19px;margin:0;font-weight:700}
+.top .sub{font-size:12px;color:var(--slate)}
+.spacer{margin-left:auto}
+.clock{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink2);font-weight:500}
+.who{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.av{width:28px;height:28px;border-radius:50%;background:var(--ink2);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600}
+.pad{padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ch{display:flex;align-items:center;gap:10px;padding:12px 15px;border-bottom:1px solid var(--line)}
+.ch h4{font-family:"Archivo Narrow",sans-serif;font-size:15.5px;margin:0;font-weight:700}
+.ch .hint{font-size:11.5px;color:var(--slate)}
+.cb{padding:15px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.g23{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 14px}
+.kpi .k{font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:10.5px;color:var(--slate);font-weight:600}
+.kpi .v{font-family:"Archivo Narrow",sans-serif;font-size:32px;font-weight:700;line-height:1.1;margin-top:3px}
+.kpi .v small{font-size:14px;color:var(--slate);font-weight:600}
+.kpi .d{font-size:11.5px;color:var(--slate);margin-top:2px}
+.kpi.hot{background:var(--ink);border-color:var(--ink)}
+.kpi.hot .k{color:#8FA0B6}.kpi.hot .v{color:var(--bus)}.kpi.hot .d{color:#A9B8CA}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;background:#EDF0F4;color:var(--ink2);white-space:nowrap}
+.pill.live{background:#E1F4EC;color:#0F7A50}.pill.warn{background:#FFF2D6;color:#8A5B00}.pill.bad{background:#FBE4E1;color:#A62A1B}.pill.mut{background:#EDF0F4;color:var(--slate)}.pill.inf{background:#E3ECFD;color:#1B4FB5}
+.pill b{width:6px;height:6px;border-radius:50%;background:currentColor;display:block}
+.btn{font-size:13px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 13px;border-radius:9px;cursor:pointer;font-family:inherit}
+.btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.acc{background:var(--bus);color:var(--ink);border-color:var(--bus)}
+.btn.dgr{background:var(--alert);color:#fff;border-color:var(--alert)}
+.btn.sm{padding:5px 10px;font-size:12px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;color:var(--slate);text-align:left;padding:9px 15px;border-bottom:1px solid var(--line);font-weight:700;background:#F7F9FB}
+.tbl td{padding:10px 15px;border-bottom:1px solid #EDF1F5}
+.tbl tr:last-child td{border-bottom:0}
+.mono{font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+.mut{color:var(--slate)}
+.nm{font-weight:600}
+.sub2{font-size:11.5px;color:var(--slate)}
+.plate{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;background:var(--bus);border:1px solid #E0A800;border-radius:4px;padding:2px 6px;white-space:nowrap}
+.stat-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px;gap:12px}
+.stat-line:last-child{border:0}
+.stat-line b{font-family:"IBM Plex Mono",monospace}
+.field{margin-bottom:13px}
+.lbl{display:block;font-family:"Archivo Narrow",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;font-weight:700;color:var(--slate);margin-bottom:5px}
+.inp{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;background:#fff}
+.inp.ph{color:#9AA6B5}
+.row{display:flex;gap:10px;align-items:center}
+.note{font-size:12.5px;color:var(--slate);margin:10px 2px 0;line-height:1.5}
+.note b{color:var(--ink2)}
+.tabs{display:flex;gap:4px;padding:0 15px;border-bottom:1px solid var(--line);background:#fff}
+.tabs a{padding:10px 12px;font-size:13px;color:var(--slate);text-decoration:none;font-weight:600;border-bottom:2px solid transparent}
+.tabs a.on{color:var(--ink);border-bottom-color:var(--bus)}
+.alertrow{display:flex;gap:11px;padding:11px 15px;border-bottom:1px solid #EDF1F5;align-items:flex-start}
+.alertrow:last-child{border-bottom:0}
+.ai{width:26px;height:26px;border-radius:8px;flex:none;display:grid;place-items:center;font-size:12px;font-weight:700;font-family:"IBM Plex Mono",monospace}
+.ai.r{background:#FBE4E1;color:var(--alert)}.ai.y{background:#FFF2D6;color:#8A5B00}.ai.g{background:#E1F4EC;color:#0F7A50}.ai.b{background:#E3ECFD;color:var(--info)}
+.al-t{font-size:13px;font-weight:600}.al-s{font-size:11.5px;color:var(--slate);margin-top:1px}
+.al-x{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--slate);white-space:nowrap}
+.bars{display:flex;align-items:flex-end;gap:9px;height:130px;padding-top:6px}
+.bars .b{flex:1;background:#DDE4EC;border-radius:5px 5px 0 0;position:relative}
+.bars .b.on{background:var(--ink)}
+.bars .b span{position:absolute;bottom:-19px;left:0;right:0;text-align:center;font-size:10.5px;color:var(--slate);font-family:"IBM Plex Mono",monospace}
+.bars .b em{position:absolute;top:-17px;left:0;right:0;text-align:center;font-size:10.5px;font-style:normal;font-family:"IBM Plex Mono",monospace;color:var(--ink)}
+.steps{display:flex;gap:0;padding:0 15px;background:#fff;border-bottom:1px solid var(--line)}
+.steps div{padding:13px 16px 11px;font-size:12.5px;color:var(--slate);border-bottom:3px solid transparent;display:flex;gap:7px;align-items:center}
+.steps div.done{color:var(--live)}
+.steps div.on{color:var(--ink);font-weight:700;border-bottom-color:var(--bus)}
+.steps i{width:18px;height:18px;border-radius:50%;background:#EDF0F4;display:grid;place-items:center;font-size:10.5px;font-style:normal;font-family:"IBM Plex Mono",monospace}
+.steps .done i{background:#E1F4EC;color:#0F7A50}
+.steps .on i{background:var(--ink);color:var(--bus)}
+.spark{display:flex;align-items:flex-end;gap:2px;height:34px}
+.spark i{flex:1;background:#C7D2DF;border-radius:2px}
+.spark i.hi{background:var(--live)}
+.hb{display:grid;grid-template-columns:repeat(30,1fr);gap:3px}
+.hb i{aspect-ratio:1;border-radius:2px;background:var(--live);display:block}
+.hb i.w{background:var(--bus)}.hb i.b{background:var(--alert)}.hb i.n{background:#E3E8EF}
+.login{display:grid;grid-template-columns:1fr 1fr;min-height:520px}
+.login .art{background:#0E1725;color:#fff;padding:44px 40px;display:flex;flex-direction:column;justify-content:space-between}
+.login .art h2{font-family:"Archivo Narrow",sans-serif;font-size:38px;line-height:1.06;margin:26px 0 12px;font-weight:700}
+.login .art p{color:#A9B8CA;font-size:14.5px;line-height:1.6;max-width:36ch;margin:0}
+.login .form{padding:44px 46px;display:flex;flex-direction:column;justify-content:center}
+.login .form h3{font-family:"Archivo Narrow",sans-serif;font-size:26px;margin:0 0 4px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.side{display:none}.g2,.g3,.g4,.g5,.g23,.login{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="chequer"></div>
+<div class="page">
+
+<header class="masthead">
+  <div class="eyebrow">Prototype 2 of 3 · Web app</div>
+  <h1>BusMitra Console — your side of the product</h1>
+  <p>What you open every morning as the operator: which schools are live, which buses stopped reporting, who hasn't paid, and what broke. Designed for one person running 20 schools — every screen answers "what needs me today?" before it shows anything else.</p>
+</header>
+
+<!-- PA-01 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-01</span><h2>Staff sign in</h2><span>Separate domain from the school app. Two-factor mandatory — this login can see every child's location.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in</div></div>
+    <div class="login">
+      <div class="art">
+        <div class="brand" style="padding:0"><div class="mark">B</div><div><b style="color:#fff">BusMitra</b><small>Console</small></div></div>
+        <div><h2>21 schools.<br>164 buses.<br>One console.</h2><p>Operator access. Every action here is written to an audit log with your name on it.</p></div>
+        <div class="mono" style="font-size:11.5px;color:#63748C">v2.4.1 · ap-south-1 · all systems normal</div>
+      </div>
+      <div class="form">
+        <h3>Sign in</h3>
+        <p class="mut" style="font-size:13.5px;margin:0 0 22px">Use your @busmitra.in account.</p>
+        <div class="field"><label class="lbl">Work email</label><div class="inp mono">karthik@busmitra.in</div></div>
+        <div class="field"><label class="lbl">Password</label><div class="inp mono">••••••••••••</div></div>
+        <div class="field"><label class="lbl">Authenticator code</label><div class="inp mono ph">6 digits</div></div>
+        <button class="btn pri" style="width:100%;padding:11px">Sign in</button>
+        <p class="note">Support staff get a restricted role: they can read a school's data only after the school raises a ticket, and only for 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PA-02 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-02</span><h2>Operations overview</h2><span>The 7:15 AM screen. Anything red here means a school is about to call you.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/</div></div>
+    <div class="app"><div class="side" data-nav="ops"></div>
+      <div class="main">
+        <div class="top"><h3>Operations</h3><div class="sub">Morning window · 6:30 – 9:00 AM</div><div class="spacer"></div><span class="pill live"><b></b>Pipeline healthy</span><div class="clock">Fri 14 Aug · 7:42 AM</div><div class="who"><div class="av">K</div>Karthik</div></div>
+        <div class="pad">
+          <div class="g5">
+            <div class="kpi hot"><div class="k">Buses reporting</div><div class="v">147 <small>/ 164</small></div><div class="d">17 idle or off duty</div></div>
+            <div class="kpi"><div class="k">Schools live now</div><div class="v">19 <small>/ 21</small></div><div class="d">2 on holiday today</div></div>
+            <div class="kpi"><div class="k">Children tracked</div><div class="v">5,204</div><div class="d">Peak so far this term</div></div>
+            <div class="kpi"><div class="k">Needs you</div><div class="v" style="color:var(--alert)">6</div><div class="d">3 device, 2 billing, 1 ticket</div></div>
+            <div class="kpi"><div class="k">MRR</div><div class="v">₹1.97<small>L</small></div><div class="d">+₹14,400 this month</div></div>
+          </div>
+          <div class="g23">
+            <div class="card"><div class="ch"><h4>Needs you today</h4><div class="spacer"></div><span class="hint">Sorted by how loudly it will ring</span></div>
+              <div class="alertrow"><div class="ai r">!</div><div><div class="al-t">St. Aloysius PU — 3 buses not reporting for 40 min</div><div class="al-s">Same SIM batch · likely Jio APN issue, not app crash</div></div><div class="al-x"><button class="btn sm dgr">Open</button></div></div>
+              <div class="alertrow"><div class="ai r">₹</div><div><div class="al-t">Canara High School — invoice 22 days overdue</div><div class="al-s">₹14,400 · 3 reminders sent · service pauses in 8 days</div></div><div class="al-x"><button class="btn sm">Call</button></div></div>
+              <div class="alertrow"><div class="ai y">◷</div><div><div class="al-t">Mangala English Medium — trips not started, 4th day</div><div class="al-s">Drivers may not be using the app · usage dropped 78%</div></div><div class="al-x"><button class="btn sm">Open</button></div></div>
+              <div class="alertrow"><div class="ai b">✎</div><div><div class="al-t">Sharada Vidyalaya wants 2 more buses added</div><div class="al-s">₹2,400/month uplift · they'll sign today</div></div><div class="al-x"><button class="btn sm pri">Add buses</button></div></div>
+              <div class="alertrow"><div class="ai y">◔</div><div><div class="al-t">Trial ends in 3 days — Vidyodaya, Udupi</div><div class="al-s">6 buses · 92% driver app usage · strong signal</div></div><div class="al-x"><button class="btn sm">Convert</button></div></div>
+              <div class="alertrow"><div class="ai g">↑</div><div><div class="al-t">Location pipeline back to normal</div><div class="al-s">Queue lag peaked at 41 s during 7:10 rush, now 1.2 s</div></div><div class="al-x">7:19</div></div>
+            </div>
+            <div class="card"><div class="ch"><h4>This morning, minute by minute</h4><span class="hint">Buses reporting</span></div>
+              <div class="cb"><div class="bars">
+                <div class="b" style="height:14%"><span>6:30</span></div><div class="b" style="height:31%"><span>6:45</span></div><div class="b" style="height:62%"><span>7:00</span></div><div class="b on" style="height:96%"><em>147</em><span>7:15</span></div><div class="b on" style="height:91%"><span>7:30</span></div><div class="b" style="height:74%"><span>7:45</span></div>
+              </div>
+              <div class="stat-line" style="margin-top:30px"><span>Location points received today</span><b>3.4 M</b></div>
+              <div class="stat-line"><span>Push notifications sent</span><b>18,206</b></div>
+              <div class="stat-line"><span>WhatsApp messages sent</span><b>1,431 · ₹165</b></div>
+              <div class="stat-line"><span>Server cost so far today</span><b>₹212</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Note the framing: not "dashboard", but a queue of things needing a human. At 21 schools you cannot browse — you can only work a list.</p>
+</section>
+
+<!-- PA-03 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-03</span><h2>Schools</h2><span>Health column is the retention early-warning system: driver app usage, not logins.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/schools</div></div>
+    <div class="app"><div class="side" data-nav="schools"></div>
+      <div class="main">
+        <div class="top"><h3>Schools</h3><div class="sub">21 live · 3 in trial · 2 churned</div><div class="spacer"></div><button class="btn sm">Export</button><button class="btn sm pri">Onboard a school</button></div>
+        <div class="pad">
+          <div class="row" style="gap:8px"><div class="inp ph" style="max-width:260px;font-size:12.5px">Search school or city</div><span class="pill live"><b></b>Healthy 15</span><span class="pill warn"><b></b>At risk 4</span><span class="pill bad"><b></b>Critical 2</span><span class="pill inf">Trial 3</span></div>
+          <div class="card">
+            <table class="tbl">
+              <tr><th>School</th><th>City</th><th>Buses</th><th>Children</th><th>Driver app usage</th><th>Parent adoption</th><th>Plan</th><th>Health</th></tr>
+              <tr><td class="nm">Sharada Vidyalaya<div class="sub2">Since Jun 2026</div></td><td>Mangalore</td><td class="mono">8</td><td class="mono">268</td><td><div class="spark"><i class="hi" style="height:80%"></i><i class="hi" style="height:92%"></i><i class="hi" style="height:88%"></i><i class="hi" style="height:96%"></i><i class="hi" style="height:94%"></i><i class="hi" style="height:98%"></i></div><div class="sub2 mono">98%</div></td><td class="mono">85%</td><td>Standard</td><td><span class="pill live"><b></b>Healthy</span></td></tr>
+              <tr><td class="nm">St. Aloysius PU<div class="sub2">Since Jul 2026</div></td><td>Mangalore</td><td class="mono">14</td><td class="mono">512</td><td><div class="spark"><i class="hi" style="height:90%"></i><i class="hi" style="height:86%"></i><i class="hi" style="height:88%"></i><i style="height:34%"></i><i style="height:22%"></i><i style="height:18%"></i></div><div class="sub2 mono">61% · falling</div></td><td class="mono">72%</td><td>Standard</td><td><span class="pill bad"><b></b>Devices down</span></td></tr>
+              <tr><td class="nm">Canara High School</td><td>Mangalore</td><td class="mono">12</td><td class="mono">431</td><td><div class="spark"><i class="hi" style="height:88%"></i><i class="hi" style="height:90%"></i><i class="hi" style="height:84%"></i><i class="hi" style="height:92%"></i><i class="hi" style="height:88%"></i><i class="hi" style="height:90%"></i></div><div class="sub2 mono">91%</div></td><td class="mono">79%</td><td>Standard</td><td><span class="pill bad"><b></b>Payment 22 d</span></td></tr>
+              <tr><td class="nm">Mangala English Medium</td><td>Ullal</td><td class="mono">5</td><td class="mono">160</td><td><div class="spark"><i class="hi" style="height:70%"></i><i style="height:44%"></i><i style="height:30%"></i><i style="height:20%"></i><i style="height:14%"></i><i style="height:12%"></i></div><div class="sub2 mono">22% · falling</div></td><td class="mono">31%</td><td>Basic</td><td><span class="pill warn"><b></b>At risk</span></td></tr>
+              <tr><td class="nm">Vidyodaya School<div class="sub2">Trial ends 17 Aug</div></td><td>Udupi</td><td class="mono">6</td><td class="mono">198</td><td><div class="spark"><i class="hi" style="height:60%"></i><i class="hi" style="height:80%"></i><i class="hi" style="height:88%"></i><i class="hi" style="height:92%"></i><i class="hi" style="height:90%"></i><i class="hi" style="height:94%"></i></div><div class="sub2 mono">92%</div></td><td class="mono">64%</td><td><span class="pill inf">Trial</span></td><td><span class="pill live"><b></b>Will convert</span></td></tr>
+              <tr><td class="nm">Sri Ramakrishna Vidyashala</td><td>Kundapura</td><td class="mono">9</td><td class="mono">302</td><td><div class="spark"><i class="hi" style="height:84%"></i><i class="hi" style="height:80%"></i><i class="hi" style="height:86%"></i><i class="hi" style="height:82%"></i><i class="hi" style="height:88%"></i><i class="hi" style="height:86%"></i></div><div class="sub2 mono">87%</div></td><td class="mono">68%</td><td>Standard</td><td><span class="pill live"><b></b>Healthy</span></td></tr>
+              <tr><td class="nm">Little Rock Indian School</td><td>Brahmavar</td><td class="mono">7</td><td class="mono">241</td><td><div class="spark"><i class="hi" style="height:76%"></i><i class="hi" style="height:82%"></i><i class="hi" style="height:78%"></i><i class="hi" style="height:80%"></i><i class="hi" style="height:74%"></i><i class="hi" style="height:80%"></i></div><div class="sub2 mono">81%</div></td><td class="mono">59%</td><td>Standard</td><td><span class="pill warn"><b></b>Low adoption</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Health score = driver app usage (60%) + parent adoption (25%) + payment status (15%). Driver usage is the only leading indicator that matters — if drivers stop opening the app, the school churns in 8 weeks.</p>
+</section>
+
+<!-- PA-04 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-04</span><h2>School detail</h2><span>One page you can read out loud on a call with the principal.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/schools/svk-mng-014</div></div>
+    <div class="app"><div class="side" data-nav="schools"></div>
+      <div class="main">
+        <div class="top"><h3>Sharada Vidyalaya, Kodialbail</h3><div class="sub mono">SVK-MNG-014 · live since 12 Jun 2026</div><div class="spacer"></div><span class="pill live"><b></b>Healthy</span><button class="btn sm">Sign in as school (audited)</button><button class="btn sm pri">Add buses</button></div>
+        <div class="tabs"><a class="on" href="#">Overview</a><a href="#">Buses &amp; devices</a><a href="#">Billing</a><a href="#">Tickets</a><a href="#">Activity log</a></div>
+        <div class="pad">
+          <div class="g4">
+            <div class="kpi"><div class="k">Buses</div><div class="v">8</div><div class="d">All reporting today</div></div>
+            <div class="kpi"><div class="k">Children</div><div class="v">268</div><div class="d">of 1,140 students</div></div>
+            <div class="kpi"><div class="k">Monthly value</div><div class="v">₹9,600</div><div class="d">₹1,200 × 8 buses</div></div>
+            <div class="kpi hot"><div class="k">Health</div><div class="v">94</div><div class="d">Top quartile of your schools</div></div>
+          </div>
+          <div class="g2">
+            <div class="card"><div class="ch"><h4>Contacts</h4></div><div class="cb">
+              <div class="stat-line"><span>Principal</span><b>Fr. Alwyn D'Souza · +91 98450 22119</b></div>
+              <div class="stat-line"><span>Office (decision maker)</span><b>Sunitha L. · +91 99012 88104</b></div>
+              <div class="stat-line"><span>Transport in-charge</span><b>Ravindra Bhat · +91 94481 20033</b></div>
+              <div class="stat-line"><span>Last spoke to</span><b>Sunitha · 6 Aug · route change</b></div>
+              <div class="stat-line"><span>Renewal date</span><b>12 Jun 2027</b></div>
+            </div></div>
+            <div class="card"><div class="ch"><h4>Usage over 8 weeks</h4><span class="hint">Trips recorded per week</span></div>
+              <div class="cb"><div class="bars">
+                <div class="b" style="height:34%"><span>W1</span></div><div class="b" style="height:58%"><span>W2</span></div><div class="b" style="height:72%"><span>W3</span></div><div class="b" style="height:80%"><span>W4</span></div><div class="b on" style="height:88%"><span>W5</span></div><div class="b on" style="height:92%"><span>W6</span></div><div class="b on" style="height:90%"><span>W7</span></div><div class="b on" style="height:94%"><em>78</em><span>W8</span></div>
+              </div><p class="note" style="margin-top:28px">Ramp completed in week 4 — that's your onboarding benchmark. Any school below 70% at week 4 needs a site visit.</p></div>
+            </div>
+          </div>
+          <div class="card"><div class="ch"><h4>Buses</h4><div class="spacer"></div><span class="pill live">8 healthy</span></div>
+            <table class="tbl">
+              <tr><th>Bus</th><th>Route</th><th>Tracking device</th><th>Battery</th><th>Last ping</th><th>App version</th><th>Today</th></tr>
+              <tr><td><span class="plate">KA 19 AB 4412</span></td><td>R1 Kadri – Bejai</td><td>Driver phone · Redmi 12<div class="sub2 mono">Airtel</div></td><td class="mono">72%</td><td class="mono">4 s ago</td><td class="mono">2.4.1</td><td><span class="pill live"><b></b>Trip done</span></td></tr>
+              <tr><td><span class="plate">KA 19 AB 6710</span></td><td>R2 Kankanady</td><td>Driver phone · Moto G34<div class="sub2 mono">Jio</div></td><td class="mono">54%</td><td class="mono">2 s ago</td><td class="mono">2.4.1</td><td><span class="pill live"><b></b>Running</span></td></tr>
+              <tr><td><span class="plate">KA 19 AC 1188</span></td><td>R3 Surathkal</td><td>Driver phone · Redmi 12<div class="sub2 mono">Jio</div></td><td class="mono" style="color:#8A5B00">18%</td><td class="mono">6 s ago</td><td class="mono">2.4.1</td><td><span class="pill bad"><b></b>Late</span></td></tr>
+              <tr><td><span class="plate">KA 19 AC 3345</span></td><td>R5 Deralakatte</td><td>Driver phone · Realme C55<div class="sub2 mono">BSNL</div></td><td class="mono">91%</td><td class="mono">2 h ago</td><td class="mono" style="color:#8A5B00">2.3.7</td><td><span class="pill warn"><b></b>Not started</span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">"Sign in as school" is essential for support and dangerous for trust. Log it, show the school a banner while it's happening, expire it in 60 minutes.</p>
+</section>
+
+<!-- PA-05 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-05</span><h2>Onboard a school</h2><span>Your onboarding cost is the whole business model. Target: live in 4 hours, not 4 weeks.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/onboard</div></div>
+    <div class="app"><div class="side" data-nav="schools"></div>
+      <div class="main">
+        <div class="top"><h3>Onboarding — Vidyodaya School, Udupi</h3><div class="sub">Started 11 Aug · target live 18 Aug</div><div class="spacer"></div><span class="pill warn"><b></b>Step 4 of 6</span></div>
+        <div class="steps">
+          <div class="done"><i>✓</i>School &amp; plan</div><div class="done"><i>✓</i>Buses</div><div class="done"><i>✓</i>Routes &amp; stops</div><div class="on"><i>4</i>Children</div><div><i>5</i>Drivers</div><div><i>6</i>Go live</div>
+        </div>
+        <div class="pad">
+          <div class="g23">
+            <div class="card"><div class="ch"><h4>Import children</h4><span class="hint">Upload the school's own Excel — don't retype it</span></div>
+              <div class="cb">
+                <div style="border:2px dashed var(--line);border-radius:12px;padding:26px;text-align:center;background:#F7F9FB">
+                  <div class="mono" style="font-size:13px;font-weight:600">vidyodaya_bus_students_2026.xlsx</div>
+                  <div class="sub2" style="margin-top:4px">198 rows · 7 columns detected</div>
+                  <div class="row" style="justify-content:center;margin-top:12px"><button class="btn sm">Replace file</button><button class="btn sm pri">Continue</button></div>
+                </div>
+                <div style="margin-top:16px">
+                  <div class="stat-line"><span>Matched to a stop automatically</span><b style="color:var(--live)">171</b></div>
+                  <div class="stat-line"><span>Stop name unclear — you decide</span><b style="color:#8A5B00">21</b></div>
+                  <div class="stat-line"><span>No parent mobile number</span><b style="color:var(--alert)">6</b></div>
+                  <div class="stat-line"><span>Duplicate admission numbers</span><b>0</b></div>
+                </div>
+              </div>
+            </div>
+            <div class="card"><div class="ch"><h4>Fix 21 unclear stops</h4><div class="spacer"></div><span class="hint mono">3 of 21</span></div>
+              <div class="cb">
+                <div class="field"><label class="lbl">Their spelling</label><div class="inp mono">MANIPAL LAWN JN</div></div>
+                <div class="field"><label class="lbl">Nearest stop on Route 2</label><div class="inp">Manipal Lawns Junction</div></div>
+                <div class="row"><button class="btn pri">Use this stop</button><button class="btn">Create new stop</button><button class="btn">Skip</button></div>
+                <p class="note">Tip: 80% of unclear stops are spelling. Match on sound, not spelling — a fuzzy match on Kannada-English transliteration clears most of them.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card"><div class="ch"><h4>Go-live checklist</h4><div class="spacer"></div><span class="hint">All six must be green before you switch on parent alerts</span></div>
+            <div class="cb"><div class="g2">
+              <div>
+                <div class="stat-line"><span>Routes drawn and timed</span><span class="pill live">Done · 6 routes</span></div>
+                <div class="stat-line"><span>Driver phones have the app</span><span class="pill live">6 of 6</span></div>
+                <div class="stat-line"><span>Test trip run on every route</span><span class="pill warn">4 of 6</span></div>
+              </div>
+              <div>
+                <div class="stat-line"><span>WhatsApp templates approved</span><span class="pill live">Done</span></div>
+                <div class="stat-line"><span>Office staff trained (30 min)</span><span class="pill live">Done · 12 Aug</span></div>
+                <div class="stat-line"><span>Parent invite SMS drafted</span><span class="pill mut">Not started</span></div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Every hour you shave off onboarding is pure margin. Build the Excel importer before you build anything pretty — it is the difference between 5 schools and 50.</p>
+</section>
+
+<!-- PA-06 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-06</span><h2>Device health</h2><span>You don't sell hardware, but you own the uptime. This screen is where you catch it first.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/devices</div></div>
+    <div class="app"><div class="side" data-nav="dev"></div>
+      <div class="main">
+        <div class="top"><h3>Devices</h3><div class="sub">164 buses · 152 driver phones · 12 GPS units</div><div class="spacer"></div><span class="pill bad"><b></b>7 silent</span><button class="btn sm">Push app update</button></div>
+        <div class="pad">
+          <div class="g4">
+            <div class="kpi"><div class="k">Reporting normally</div><div class="v" style="color:var(--live)">147</div><div class="d">Ping under 15 s</div></div>
+            <div class="kpi"><div class="k">Weak signal</div><div class="v" style="color:#8A5B00">10</div><div class="d">Gaps over 60 s on route</div></div>
+            <div class="kpi"><div class="k">Silent over 30 min</div><div class="v" style="color:var(--alert)">7</div><div class="d">3 at St. Aloysius</div></div>
+            <div class="kpi"><div class="k">Battery under 20%</div><div class="v">11</div><div class="d">Charger missing in bus</div></div>
+          </div>
+          <div class="card"><div class="ch"><h4>Location reports today</h4><span class="hint">Each square is 30 minutes, 6 AM to 9 PM</span></div>
+            <div class="cb">
+              <div class="hb">
+                <i class="n"></i><i class="n"></i><i></i><i></i><i class="w"></i><i class="b"></i><i class="w"></i><i></i><i></i><i></i><i></i><i></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i></i><i></i><i></i><i class="w"></i><i></i><i></i><i></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i>
+              </div>
+              <div class="row" style="margin-top:12px;font-size:11.5px;color:var(--slate);gap:16px"><span>■ Normal</span><span style="color:#8A5B00">■ Lag over 20 s</span><span style="color:var(--alert)">■ Data loss</span><span>■ No trips scheduled</span></div>
+            </div>
+          </div>
+          <div class="card"><div class="ch"><h4>Devices needing attention</h4><div class="spacer"></div><button class="btn sm">Send remote diagnostic</button></div>
+            <table class="tbl">
+              <tr><th>School</th><th>Bus</th><th>Device</th><th>Network</th><th>Last ping</th><th>Battery</th><th>Likely cause</th><th></th></tr>
+              <tr><td>St. Aloysius PU</td><td><span class="plate">KA 19 M 2231</span></td><td>Redmi 13C<div class="sub2 mono">v2.4.1</div></td><td class="mono">Jio</td><td class="mono" style="color:var(--alert)">42 min</td><td class="mono">88%</td><td>Battery optimisation re-enabled after OS update</td><td><button class="btn sm dgr">Call driver</button></td></tr>
+              <tr><td>St. Aloysius PU</td><td><span class="plate">KA 19 M 2244</span></td><td>Redmi 13C<div class="sub2 mono">v2.4.1</div></td><td class="mono">Jio</td><td class="mono" style="color:var(--alert)">41 min</td><td class="mono">76%</td><td>Same batch — same cause</td><td><button class="btn sm">Guide</button></td></tr>
+              <tr><td>Mangala English</td><td><span class="plate">KA 19 P 8890</span></td><td>Realme C51<div class="sub2 mono">v2.3.7</div></td><td class="mono">BSNL</td><td class="mono" style="color:#8A5B00">6 min</td><td class="mono" style="color:var(--alert)">9%</td><td>No charger in bus · repeat offender 9 days</td><td><button class="btn sm">Ship charger</button></td></tr>
+              <tr><td>Canara High</td><td><span class="plate">KA 19 J 4402</span></td><td>GPS unit · GT06N<div class="sub2 mono">fw 1.8</div></td><td class="mono">Airtel M2M</td><td class="mono">11 s</td><td class="mono">Wired</td><td>Fine — listed for firmware update</td><td><button class="btn sm">Update</button></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Android battery optimisation killing the app is the single biggest ops cost in this business. Detect it server-side (ping gap pattern), then walk the driver through the setting over a phone call. Build the detector, not just the alert.</p>
+</section>
+
+<!-- PA-07 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-07</span><h2>Billing</h2><span>Per-bus, per-month, invoiced to the school. Never to parents — that kills adoption.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/billing</div></div>
+    <div class="app"><div class="side" data-nav="bill"></div>
+      <div class="main">
+        <div class="top"><h3>Billing</h3><div class="sub">August 2026</div><div class="spacer"></div><button class="btn sm">Send reminders (4)</button><button class="btn sm pri">Raise invoices</button></div>
+        <div class="pad">
+          <div class="g4">
+            <div class="kpi hot"><div class="k">Monthly recurring</div><div class="v">₹1.97<small>L</small></div><div class="d">164 buses billed</div></div>
+            <div class="kpi"><div class="k">Collected this month</div><div class="v">₹1.62<small>L</small></div><div class="d">82% · 6 invoices open</div></div>
+            <div class="kpi"><div class="k">Overdue</div><div class="v" style="color:var(--alert)">₹24,800</div><div class="d">2 schools · oldest 22 days</div></div>
+            <div class="kpi"><div class="k">Cost to serve</div><div class="v">₹31,400</div><div class="d">16% of revenue · servers + SMS</div></div>
+          </div>
+          <div class="card"><div class="ch"><h4>Invoices</h4><div class="spacer"></div><span class="pill">All</span><span class="pill bad">Overdue 2</span><span class="pill warn">Due soon 4</span></div>
+            <table class="tbl">
+              <tr><th>School</th><th>Invoice</th><th>Buses</th><th>Amount</th><th>Raised</th><th>Due</th><th>Status</th><th></th></tr>
+              <tr><td class="nm">Canara High School</td><td class="mono">BM-2026-0184</td><td class="mono">12</td><td class="mono">₹14,400 + GST</td><td class="mono">01 Jul</td><td class="mono">23 Jul</td><td><span class="pill bad"><b></b>22 days late</span></td><td><button class="btn sm dgr">Pause service</button></td></tr>
+              <tr><td class="nm">Mangala English Medium</td><td class="mono">BM-2026-0191</td><td class="mono">5</td><td class="mono">₹5,000 + GST</td><td class="mono">01 Aug</td><td class="mono">11 Aug</td><td><span class="pill bad"><b></b>3 days late</span></td><td><button class="btn sm">Remind</button></td></tr>
+              <tr><td class="nm">Sharada Vidyalaya</td><td class="mono">BM-2026-0206</td><td class="mono">8</td><td class="mono">₹9,600 + GST</td><td class="mono">01 Aug</td><td class="mono">11 Aug</td><td><span class="pill live"><b></b>Paid · UPI</span></td><td><button class="btn sm">Receipt</button></td></tr>
+              <tr><td class="nm">St. Aloysius PU</td><td class="mono">BM-2026-0207</td><td class="mono">14</td><td class="mono">₹16,800 + GST</td><td class="mono">01 Aug</td><td class="mono">11 Aug</td><td><span class="pill live"><b></b>Paid · NEFT</span></td><td><button class="btn sm">Receipt</button></td></tr>
+              <tr><td class="nm">Vidyodaya School</td><td class="mono">—</td><td class="mono">6</td><td class="mono">₹7,200 + GST</td><td class="mono mut">Trial</td><td class="mono">18 Aug</td><td><span class="pill inf">First invoice pending</span></td><td><button class="btn sm pri">Convert</button></td></tr>
+            </table>
+          </div>
+          <div class="g2">
+            <div class="card"><div class="ch"><h4>Revenue by month</h4></div><div class="cb"><div class="bars">
+              <div class="b" style="height:20%"><span>Mar</span></div><div class="b" style="height:32%"><span>Apr</span></div><div class="b" style="height:30%"><span>May</span></div><div class="b" style="height:58%"><span>Jun</span></div><div class="b on" style="height:80%"><span>Jul</span></div><div class="b on" style="height:92%"><em>₹1.97L</em><span>Aug</span></div>
+            </div><p class="note" style="margin-top:28px">June and August jumps are the school-year effect. You will sign 70% of a year's schools in April–June — plan cash and hiring around it.</p></div></div>
+            <div class="card"><div class="ch"><h4>Unit economics per bus</h4><span class="hint">Per month</span></div><div class="cb">
+              <div class="stat-line"><span>Price charged</span><b>₹1,200</b></div>
+              <div class="stat-line"><span>Servers, database, maps</span><b>₹78</b></div>
+              <div class="stat-line"><span>SMS + WhatsApp</span><b>₹96</b></div>
+              <div class="stat-line"><span>Support time (allocated)</span><b>₹120</b></div>
+              <div class="stat-line"><span>Payment gateway</span><b>₹24</b></div>
+              <div class="stat-line" style="border-top:2px solid var(--ink);margin-top:6px;padding-top:10px"><span><b style="font-family:'Public Sans'">Gross margin</b></span><b style="color:var(--live)">₹882 · 73%</b></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Pause-on-non-payment must be gentle: stop the parent app, keep the office console and safety alerts running. Cutting off a safety product over ₹5,000 is a reputation event in a small city.</p>
+</section>
+
+<!-- PA-08 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-08</span><h2>Support inbox</h2><span>Every ticket carries the school's live state, so you don't start by asking questions.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/support</div></div>
+    <div class="app"><div class="side" data-nav="sup"></div>
+      <div class="main">
+        <div class="top"><h3>Support</h3><div class="sub">9 open · median first reply 14 min</div><div class="spacer"></div><span class="pill bad"><b></b>2 urgent</span></div>
+        <div style="display:grid;grid-template-columns:300px 1fr;flex:1">
+          <div style="background:#fff;border-right:1px solid var(--line)">
+            <div style="padding:10px 14px;border-bottom:1px solid #EDF1F5;background:#F7F9FB;box-shadow:inset 3px 0 0 var(--alert)"><div class="row"><b style="font-size:13px">Parent can't see bus</b><span class="pill bad" style="margin-left:auto">Urgent</span></div><div class="sub2" style="margin-top:4px">Sharada Vidyalaya · 8 min ago</div></div>
+            <div style="padding:10px 14px;border-bottom:1px solid #EDF1F5"><div class="row"><b style="font-size:13px">3 buses not showing</b><span class="pill bad" style="margin-left:auto">Urgent</span></div><div class="sub2" style="margin-top:4px">St. Aloysius PU · 34 min ago</div></div>
+            <div style="padding:10px 14px;border-bottom:1px solid #EDF1F5"><div class="row"><b style="font-size:13px">Add new route mid-term</b><span class="pill" style="margin-left:auto">Normal</span></div><div class="sub2" style="margin-top:4px">Canara High · 2 h ago</div></div>
+            <div style="padding:10px 14px;border-bottom:1px solid #EDF1F5"><div class="row"><b style="font-size:13px">Attendance report wrong</b><span class="pill warn" style="margin-left:auto">Checking</span></div><div class="sub2" style="margin-top:4px">Little Rock · yesterday</div></div>
+            <div style="padding:10px 14px"><div class="row"><b style="font-size:13px">Invoice GST number change</b><span class="pill" style="margin-left:auto">Normal</span></div><div class="sub2" style="margin-top:4px">Vidyodaya · yesterday</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <div style="padding:14px 20px;border-bottom:1px solid var(--line);background:#fff">
+              <div class="row"><h4 style="margin:0;font-family:'Archivo Narrow';font-size:18px">Parent can't see the bus on the map</h4><span class="pill bad" style="margin-left:auto"><b></b>Urgent</span><button class="btn sm">Assign to me</button><button class="btn sm pri">Reply</button></div>
+              <div class="sub2" style="margin-top:5px">Sharada Vidyalaya · raised by Sunitha L. (office) · ticket <span class="mono">#1188</span></div>
+            </div>
+            <div class="pad" style="flex:1">
+              <div class="card"><div class="ch"><h4>What the school said</h4></div><div class="cb" style="font-size:13.5px;line-height:1.6">Aditi Rao's mother says the app shows "waiting for bus to start" but the bus already crossed her stop. She is calling us every morning. Class 6B, Route 3.</div></div>
+              <div class="card" style="border-color:var(--bus)"><div class="ch" style="background:#FFF8E6;border-color:#F0D48A"><h4>What the system already knows</h4><span class="hint">Pulled automatically when the ticket opened</span></div>
+                <div class="cb">
+                  <div class="g2">
+                    <div>
+                      <div class="stat-line"><span>Child</span><b>Aditi Rao · ADM-2211 · R3</b></div>
+                      <div class="stat-line"><span>Assigned stop</span><b>Baikampady (stop 5)</b></div>
+                      <div class="stat-line"><span>Parent app version</span><b style="color:var(--alert)">1.9.0 · 4 versions behind</b></div>
+                      <div class="stat-line"><span>Push permission</span><b style="color:var(--alert)">Denied on device</b></div>
+                    </div>
+                    <div>
+                      <div class="stat-line"><span>Bus reporting</span><b style="color:var(--live)">Normal · 4 s ago</b></div>
+                      <div class="stat-line"><span>Boarding marked today</span><b style="color:var(--live)">Yes · 7:34</b></div>
+                      <div class="stat-line"><span>Last app open</span><b>7:19 AM</b></div>
+                      <div class="stat-line"><span>Similar tickets</span><b>6 this month · same cause</b></div>
+                    </div>
+                  </div>
+                  <div class="row" style="margin-top:14px"><button class="btn acc">Send update instructions in Kannada</button><button class="btn">Force refresh her app session</button><button class="btn">Mark as known issue</button></div>
+                </div>
+              </div>
+              <p class="note">Six tickets, one cause: stale app version. That's a release-notes problem, not a support problem — the console should be nudging you to force an update, which is what the "known issue" tag triggers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PA-09 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-09</span><h2>System health</h2><span>One screen, because at your scale the only real risks are the queue backing up and the DB filling.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/system</div></div>
+    <div class="app"><div class="side" data-nav="sys"></div>
+      <div class="main">
+        <div class="top"><h3>System</h3><div class="sub">ap-south-1 (Mumbai)</div><div class="spacer"></div><span class="pill live"><b></b>All services up</span><div class="clock">Uptime 99.94% / 30 d</div></div>
+        <div class="pad">
+          <div class="g4">
+            <div class="kpi"><div class="k">Location points / min</div><div class="v">4,880</div><div class="d">Peak today 6,210 at 7:12</div></div>
+            <div class="kpi"><div class="k">Queue lag</div><div class="v">1.2<small> s</small></div><div class="d">Alert threshold 15 s</div></div>
+            <div class="kpi"><div class="k">API p95</div><div class="v">148<small> ms</small></div><div class="d">Stable</div></div>
+            <div class="kpi"><div class="k">Database size</div><div class="v">62<small> GB</small></div><div class="d">Raw GPS trimmed after 90 days</div></div>
+          </div>
+          <div class="g2">
+            <div class="card"><div class="ch"><h4>Ingestion, last 24 hours</h4></div><div class="cb"><div class="bars" style="height:110px">
+              <div class="b" style="height:8%"><span>00</span></div><div class="b" style="height:6%"><span>03</span></div><div class="b on" style="height:94%"><em>peak</em><span>07</span></div><div class="b" style="height:22%"><span>10</span></div><div class="b" style="height:16%"><span>13</span></div><div class="b on" style="height:78%"><span>16</span></div><div class="b" style="height:12%"><span>19</span></div><div class="b" style="height:7%"><span>22</span></div>
+            </div><p class="note" style="margin-top:28px">Twin peaks at 7 AM and 4 PM, near-zero the rest of the day. Autoscale the workers on a schedule — you're paying for idle capacity 18 hours a day otherwise.</p></div></div>
+            <div class="card"><div class="ch"><h4>Services</h4></div><div class="cb">
+              <div class="stat-line"><span>Location ingest (websocket)</span><span class="pill live"><b></b>Up · 2 workers</span></div>
+              <div class="stat-line"><span>Alert engine</span><span class="pill live"><b></b>Up</span></div>
+              <div class="stat-line"><span>Push (FCM)</span><span class="pill live"><b></b>Up · 0.3% failures</span></div>
+              <div class="stat-line"><span>WhatsApp Cloud API</span><span class="pill warn"><b></b>Degraded · retrying 11</span></div>
+              <div class="stat-line"><span>SMS gateway</span><span class="pill live"><b></b>Up</span></div>
+              <div class="stat-line"><span>Nightly report cron</span><span class="pill live"><b></b>Ran 00:12 · 21 schools</span></div>
+              <div class="stat-line"><span>Backups</span><span class="pill live"><b></b>Last 02:00 · restore tested 9 Aug</span></div>
+            </div></div>
+          </div>
+          <div class="card"><div class="ch"><h4>Recent incidents</h4></div>
+            <div class="alertrow"><div class="ai y">◷</div><div><div class="al-t">Queue lag reached 41 s during morning peak</div><div class="al-s">Cause: one worker OOM-killed · fixed by raising memory to 1 GB · 9 min impact</div></div><div class="al-x">Today 7:10</div></div>
+            <div class="alertrow"><div class="ai r">✖</div><div><div class="al-t">WhatsApp template rejected by Meta</div><div class="al-s">"child_not_boarded_v2" — reworded and resubmitted</div></div><div class="al-x">11 Aug</div></div>
+            <div class="alertrow"><div class="ai g">✓</div><div><div class="al-t">Restore drill passed</div><div class="al-s">Full DB restored to staging in 22 min</div></div><div class="al-x">9 Aug</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PA-10 -->
+<section class="shot">
+  <div class="shot-head"><span class="ref">PA-10</span><h2>Team &amp; audit log</h2><span>You're handling children's live locations. Assume you will one day have to prove who looked at what.</span></div>
+  <div class="frame"><div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">console.busmitra.in/team</div></div>
+    <div class="app"><div class="side" data-nav="team"></div>
+      <div class="main">
+        <div class="top"><h3>Team</h3><div class="sub">4 people · 2 roles</div><div class="spacer"></div><button class="btn sm">Export audit log</button><button class="btn sm pri">Invite</button></div>
+        <div class="pad">
+          <div class="card"><div class="ch"><h4>People</h4></div>
+            <table class="tbl">
+              <tr><th>Name</th><th>Role</th><th>Can see child locations</th><th>Two-factor</th><th>Last active</th></tr>
+              <tr><td class="nm">Karthik<div class="sub2 mono">karthik@busmitra.in</div></td><td>Owner</td><td><span class="pill live">Yes · all schools</span></td><td><span class="pill live">On</span></td><td class="mono">Now</td></tr>
+              <tr><td class="nm">Support agent 1<div class="sub2 mono">help@busmitra.in</div></td><td>Support</td><td><span class="pill warn">Only with an open ticket · 24 h</span></td><td><span class="pill live">On</span></td><td class="mono">12 min ago</td></tr>
+              <tr><td class="nm">Field executive — Udupi<div class="sub2 mono">udupi@busmitra.in</div></td><td>Onboarding</td><td><span class="pill mut">No</span></td><td><span class="pill live">On</span></td><td class="mono">Yesterday</td></tr>
+              <tr><td class="nm">Accountant (external)<div class="sub2 mono">ca@—</div></td><td>Billing only</td><td><span class="pill mut">No</span></td><td><span class="pill bad">Off</span></td><td class="mono">4 days ago</td></tr>
+            </table>
+          </div>
+          <div class="card"><div class="ch"><h4>Audit log</h4><div class="spacer"></div><span class="hint">Write-only · kept 3 years</span></div>
+            <table class="tbl">
+              <tr><th>When</th><th>Who</th><th>Action</th><th>On</th><th>Why</th></tr>
+              <tr><td class="mono">7:48 today</td><td>Support agent 1</td><td><span class="pill warn">Viewed live map as school</span></td><td>Sharada Vidyalaya</td><td class="mono">Ticket #1188</td></tr>
+              <tr><td class="mono">7:22 today</td><td>Karthik</td><td><span class="pill">Changed plan</span></td><td>Vidyodaya School</td><td class="mono">Trial → Standard</td></tr>
+              <tr><td class="mono">Yest 18:04</td><td>Karthik</td><td><span class="pill bad">Exported child list</span></td><td>Canara High School</td><td class="mono">Migration to new route plan</td></tr>
+              <tr><td class="mono">Yest 11:31</td><td>Field executive</td><td><span class="pill">Created routes</span></td><td>Vidyodaya School</td><td class="mono">Onboarding step 3</td></tr>
+              <tr><td class="mono">12 Aug 09:15</td><td>Support agent 1</td><td><span class="pill warn">Signed in as school</span></td><td>Little Rock Indian School</td><td class="mono">Ticket #1174 · session ended 09:41</td></tr>
+            </table>
+          </div>
+          <p class="note">Publish a one-page data policy on your website before your first sale: what you collect, how long you keep raw GPS (90 days), who can see it, and that you never sell it. Schools' legal advisors will ask, and having it ready wins the deal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+<script>
+const NAV=[["Daily",[["ops","Operations",""],["dev","Devices","7"],["sup","Support","9"]]],["Business",[["schools","Schools",""],["bill","Billing","2"]]],["Platform",[["sys","System",""],["team","Team & audit",""]]]];
+document.querySelectorAll('[data-nav]').forEach(el=>{
+  const on=el.dataset.nav;
+  let h='<div class="chequer"></div><div class="brand" style="padding-top:16px"><div class="mark">B</div><div><b>BusMitra</b><small>Console</small></div></div><div class="nav">';
+  NAV.forEach(([g,items])=>{h+='<div class="grp">'+g+'</div>';items.forEach(([k,l,b])=>{h+='<a href="#" class="'+(k===on?'on':'')+'"><i></i>'+l+(b?'<span class="badge">'+b+'</span>':'')+'</a>';});});
+  el.innerHTML=h+'</div>';
+});
+</script>
+</body>
+</html>

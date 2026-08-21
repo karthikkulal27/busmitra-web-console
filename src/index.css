@@ -1,0 +1,43 @@
+@import 'tailwindcss';
+
+/* Design tokens from CLAUDE.md. Nothing here is invented. */
+@theme {
+  --color-ink: #16202e;
+  --color-ink2: #243347;
+  --color-slate: #63748c;
+  --color-line: #dce2ea;
+  --color-paper: #eff1f5;
+  --color-bus: #ffc53d;
+  --color-live: #1e9e6a;
+  --color-alert: #d8442f;
+
+  --font-head: 'Archivo Narrow', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-card: 12px;
+  --radius-btn: 9px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * The chequer strip is deliberately absent.
+ *
+ * CLAUDE.md: it "marks live vehicle contexts only". This console shows the
+ * business — schools, invoices, tickets, the audit log — and none of that is a
+ * live vehicle context. Borrowing the strip here would make the one place it
+ * does mean something mean less.
+ */
