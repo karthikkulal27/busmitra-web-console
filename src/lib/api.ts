@@ -83,6 +83,17 @@ export const api = {
     }),
 
   overview: () => request<OverviewView>('/operator/overview'),
+
+  /**
+   * PA-05. Bringing a school onto the platform is ours, not theirs - it sets the
+   * plan, the per-bus price and the trial end date, none of which a school gets
+   * to set for itself.
+   */
+  createSchool: (input: Record<string, unknown>) =>
+    request<{ schoolId: string; code: string }>('/operator/schools', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }),
   schools: () => request<{ schools: SchoolRow[] }>('/operator/schools'),
   school: (id: string) => request<SchoolDetail>(`/operator/schools/${id}`),
   saveCommercials: (id: string, input: Record<string, unknown>) =>
