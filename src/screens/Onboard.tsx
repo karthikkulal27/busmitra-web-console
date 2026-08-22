@@ -244,6 +244,8 @@ function NewSchool({ onDone }: { onDone: (message: string) => void }): React.Rea
   const [price, setPrice] = useState('1200');
   const [trialEnds, setTrialEnds] = useState('');
   const [officePhone, setOfficePhone] = useState('');
+  const [adminName, setAdminName] = useState('');
+  const [adminPhone, setAdminPhone] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const create = useMutation({
@@ -257,6 +259,8 @@ function NewSchool({ onDone }: { onDone: (message: string) => void }): React.Rea
         pricePerBusPaise: Math.round(Number(price || '0') * 100),
         trialEndsOn: plan === 'trial' && trialEnds ? trialEnds : null,
         officePhone: officePhone.trim() || null,
+        adminName: adminName.trim(),
+        adminPhone: adminPhone.trim(),
       }),
     onSuccess: (res) => {
       void queryClient.invalidateQueries({ queryKey: ['schools'] });
@@ -270,7 +274,15 @@ function NewSchool({ onDone }: { onDone: (message: string) => void }): React.Rea
       ),
   });
 
-  const ok = name.trim().length >= 3 && code.trim().length >= 3 && city.trim().length >= 2;
+  // The admin is not optional: without one the school is created and nobody
+  // can sign in to it, and the only screen that adds staff is behind that
+  // sign-in.
+  const ok =
+    name.trim().length >= 3 &&
+    code.trim().length >= 3 &&
+    city.trim().length >= 2 &&
+    adminName.trim().length >= 2 &&
+    adminPhone.trim().length >= 10;
 
   return (
     <Card title="Add a school">
@@ -311,6 +323,22 @@ function NewSchool({ onDone }: { onDone: (message: string) => void }): React.Rea
             value={officePhone}
             onChange={(e) => setOfficePhone(e.target.value)}
             placeholder="0824 2345678"
+            className="w-full rounded-btn border border-line px-3 py-2 font-mono text-[14px]"
+          />
+        </F>
+        <F label="First console user">
+          <input
+            value={adminName}
+            onChange={(e) => setAdminName(e.target.value)}
+            placeholder="Sunitha Lobo"
+            className="w-full rounded-btn border border-line px-3 py-2 text-[14px]"
+          />
+        </F>
+        <F label="Their mobile — this is the login">
+          <input
+            value={adminPhone}
+            onChange={(e) => setAdminPhone(e.target.value)}
+            placeholder="98450 11223"
             className="w-full rounded-btn border border-line px-3 py-2 font-mono text-[14px]"
           />
         </F>
